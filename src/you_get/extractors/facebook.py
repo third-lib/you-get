@@ -9,13 +9,17 @@ def facebook_download(url, output_dir='.', merge=True, info_only=False, **kwargs
     html = get_html(url)
 
     title = r1(r'<title id="pageTitle">(.+)</title>', html)
+
+    if title is None:
+      title = url
+
     sd_urls = list(set([
         unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'"sd_src_no_ratelimit":"([^"]*)"', html)
+        for i in re.findall(r'sd_src_no_ratelimit:"([^"]*)"', html)
     ]))
     hd_urls = list(set([
         unicodize(str.replace(i, '\\/', '/'))
-        for i in re.findall(r'"hd_src_no_ratelimit":"([^"]*)"', html)
+        for i in re.findall(r'hd_src_no_ratelimit:"([^"]*)"', html)
     ]))
     urls = hd_urls if hd_urls else sd_urls
 
